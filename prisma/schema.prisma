@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -28,8 +29,8 @@ model User {
 
 model Course {
     id               String             @id @unique @default(cuid())
-    name             String             @unique
-    number           Int
+    name             String
+    number           String
     season           Seasons
     year             Int
     professor        Professor          @relation(fields: [professorId], references: [id])
@@ -48,7 +49,7 @@ model Course {
 
 model Professor {
     id            String             @id @unique @default(cuid())
-    name          String
+    name          String             @unique
     courses       Course[]
     reviews       Professor_Review[]
     User          User?              @relation(fields: [userId], references: [id])

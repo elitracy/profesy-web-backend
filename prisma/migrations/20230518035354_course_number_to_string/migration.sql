@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Course" ALTER COLUMN "number" SET DATA TYPE TEXT;

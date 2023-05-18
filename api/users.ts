@@ -32,8 +32,10 @@ router.get("/:id", async (req, res) => {
     });
 });
 
+// ============================ POST ===============================
+
 // get user by email
-router.get("/", async (req, res) => {
+router.post("/email", async (req, res) => {
   const { email } = req.body;
 
   prisma.user
@@ -45,8 +47,6 @@ router.get("/", async (req, res) => {
       res.status(400).json(err);
     });
 });
-
-// ============================ POST ===============================
 
 // create user
 router.post("/", async (req, res) => {
@@ -81,4 +81,5 @@ router.delete("/:id", async (req, res) => {
       res.status(400).json(err);
     });
 });
+
 export default router;
