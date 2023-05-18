@@ -5,7 +5,7 @@ import cors from "cors";
 const app = express();
 
 // import endpoints
-// import users from "./api/users";
+import users from "./api/users";
 // import notes from "./api/notes";
 // import tags from "./api/tags";
 
@@ -14,7 +14,7 @@ app.use(express.static("public"));
 app.use(cors());
 
 // attach endpoints to their functions
-// app.use("/api/users", users);
+app.use("/users", users);
 // app.use("/api/notes", notes);
 // app.use("/api/tags", tags);
 
