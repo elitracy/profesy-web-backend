@@ -1,0 +1,39 @@
+{
+  "name": "profesy-backend",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "dotenv -e .env -- tsnodemon -x 'ts-node index.ts'",
+    "dev:debug": "dotenv -e .env.production -- tsnodemon -x 'ts-node index.ts --trace-deprecation'",
+    "test": "dotenv -e .env -- jest",
+    "test:ci": "jest",
+    "migrate:dev:prod": "dotenv -e .env.production -- npx prisma migrate dev",
+    "migrate:dev:test": "dotenv -e .env.test -- npx prisma migrate dev",
+    "migrate:deploy:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "migrate:deploy:test": "dotenv -e .env.test -- npx prisma migrate deploy",
+    "vercel-build": "prisma generate -- prisma migrate deploy",
+    "start": "dotenv -e .env.production -- ts-node index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "4.14.1",
+    "express": "^4.18.2",
+    "prisma": "^4.14.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^20.2.0",
+    "@types/supertest": "^2.0.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "tsnodemon": "^1.2.2",
+    "typescript": "^5.0.4"
+  },
+  "author": "Elias Tracy <elitracy19@gmail.com>"
+}

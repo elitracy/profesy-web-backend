@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+model User {
+    id                  String            @id @unique @default(cuid())
+    name                String
+    username            String            @unique
+    password            String
+    email               String            @unique
+    validated           Boolean           @default(false)
+    favorite_courses    Course[]
+    favorite_professors Professor[]
+    course_reviews      Course_Review?
+    professor_reviews   Professor_Review?
+    createdAt           DateTime          @default(now())
+    updatedAt           DateTime          @default(now()) @updatedAt
+}
+
+model Course {
+    id               String             @id @unique @default(cuid())
+    name             String             @unique
+    number           Int
+    season           Seasons
+    year             Int
+    professor        Professor          @relation(fields: [professorId], references: [id])
+    A                Int
+    B                Int
+    C                Int
+    D                Int
+    F                Int
+    Q                Int
+    reviews          Course_Review[]
+    User             User?              @relation(fields: [userId], references: [id])
+    userId           String?
+    professorId      String
+    Professor_Review Professor_Review[]
+}
+
+model Professor {
+    id            String             @id @unique @default(cuid())
+    name          String
+    courses       Course[]
+    reviews       Professor_Review[]
+    User          User?              @relation(fields: [userId], references: [id])
+    userId        String?
+    Course_Review Course_Review[]
+}
+
+model Professor_Review {
+    id                  String     @id @unique @default(cuid())
+    user                User       @relation(fields: [userId], references: [id])
+    professor           Professor? @relation(fields: [professorId], references: [id])
+    course              Course?    @relation(fields: [courseId], references: [id])
+    rating              Int?
+    comments            String?
+    likability          Int?
+    attendance_required Boolean?
+    responsiveness      Int?
+    userId              String     @unique
+    professorId         String?
+    courseId            String?
+}
+
+model Course_Review {
+    id                  String    @id @unique @default(cuid())
+    user                User      @relation(fields: [userId], references: [id])
+    course              Course?   @relation(fields: [courseId], references: [id])
+    professor           Professor @relation(fields: [professorId], references: [id])
+    season              Seasons
+    year                Int
+    grade               Grades?
+    rating              Int
+    textbook            Boolean?
+    comments            String?
+    hw_hours            Int?
+    attendance_required Boolean?
+    take_again          Boolean?
+    difficulty          Int?
+    userId              String    @unique()
+    courseId            String?
+    professorId         String
+}
+
+enum Seasons {
+    Spring
+    Summer
+    Fall
+}
+
+enum Grades {
+    A
+    B
+    C
+    D
+    F
+    Q
+}
