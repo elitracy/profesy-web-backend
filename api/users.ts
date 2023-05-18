@@ -48,16 +48,39 @@ router.post("/email", async (req, res) => {
     });
 });
 
+// get user by email
+router.post("/username", async (req, res) => {
+  const { username } = req.body;
+
+  prisma.user
+    .findUnique({ where: { username } })
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
 // create user
 router.post("/", async (req, res) => {
-  const body = req.body;
+  const { name, username, email, password } = req.body;
+
+  if (await prisma.user.findUnique({ where: { username } })) {
+    res.status(400).json({ error: "username exists" });
+    return;
+  }
+  if (await prisma.user.findUnique({ where: { email } })) {
+    res.status(400).json({ error: "email exists" });
+    return;
+  }
 
   prisma.user
     .create({
-      data: body,
+      data: { name, username, email, password },
     })
     .then((user) => {
-      res.status(200).json(user);
+      res.status(200).json({ error: null, ...user });
     })
     .catch((err) => {
       res.status(400).json(err);
