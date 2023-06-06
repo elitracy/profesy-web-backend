@@ -1,5 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+
 const prisma = new PrismaClient();
 
 const router = express.Router();
@@ -32,6 +34,37 @@ router.get("/:id", async (req, res) => {
     });
 });
 
+router.post("/login", async (req, res) => {
+  const { usernameOrEmail } = req.body;
+
+  const find_username = await prisma.user.findUnique({
+    where: { username: usernameOrEmail },
+  });
+
+  const find_email = await prisma.user.findUnique({
+    where: { email: usernameOrEmail },
+  });
+
+  if (!find_username && !find_email) {
+    res
+      .status(400)
+      .json({ error: "Username or email does not exist.", data: null });
+    return;
+  }
+
+  if (find_username) {
+    res.status(200).json({ error: null, data: find_username });
+    return;
+  }
+
+  if (find_email) {
+    res.status(200).json({ error: null, data: find_email });
+    return;
+  }
+
+  res.status(400).json({ error: "Internal Server Error.", data: null });
+});
+
 // ============================ POST ===============================
 
 // get user by email
@@ -48,7 +81,7 @@ router.post("/email", async (req, res) => {
     });
 });
 
-// get user by email
+// get user by username
 router.post("/username", async (req, res) => {
   const { username } = req.body;
 
