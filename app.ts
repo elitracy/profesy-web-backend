@@ -7,7 +7,7 @@ const app = express();
 // import endpoints
 import users from "./api/users";
 import professsors from "./api/professors";
-// import tags from "./api/tags";
+import courses from "./api/courses";
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -16,7 +16,7 @@ app.use(cors());
 // attach endpoints to their functions
 app.use("/users", users);
 app.use("/professors", professsors);
-// app.use("/tags", tags);
+app.use("/courses", courses);
 
 // host basic webpage (can be updated later but not necessary)
 app.get("/", (_, res) => {
