@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 // ============================ GET ============================
-// ============================ POST ===========================
 
 // get all professors
 router.get("/", async (req, res) => {
@@ -37,6 +36,25 @@ router.get("/:name", async (req, res) => {
     });
 });
 
+// get professor by id
+router.get("/id/:id", async (req, res) => {
+  const { id } = req.params;
+
+  prisma.professor
+    .findUnique({
+      where: {
+        id,
+      },
+    })
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 // ============================ POST ===========================
+// ============================ PUT ==========================
+// ============================ DELETE ===========================
 
 export default router;
