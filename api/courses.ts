@@ -62,8 +62,8 @@ router.get("/:name/:number", async (req, res) => {
     });
 });
 
-// get all courses by professor
-router.get("/:professor", async (req, res) => {
+// get all courses for a professor
+router.get("/professor/:professor", async (req, res) => {
   const { professor } = req.params;
 
   prisma.course
@@ -85,6 +85,30 @@ router.get("/:professor", async (req, res) => {
 });
 
 // ============================ POST ===========================
+
+// get semesters for a professor and course
+// needs to be POST to use body :/
+router.post("/professor/semesters", async (req, res) => {
+  const { professor, name, number } = req.body;
+
+  prisma.course
+    .findMany({
+      where: {
+        professor: {
+          name: professor,
+        },
+        name,
+        number,
+      },
+    })
+    .then((semesters) => {
+      res.status(200).json(semesters);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
 // ============================ PUT ===========================
 // ============================ DELETE ===========================
 
